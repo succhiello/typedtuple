@@ -1,6 +1,6 @@
 from pytest import raises
 
-from voluptuous import Schema, MultipleInvalid, Coerce
+from voluptuous import Schema, MultipleInvalid, Coerce, Optional, UNDEFINED
 
 from typedtuple import TypedTuple, schema
 
@@ -92,3 +92,20 @@ def test_field_order_fixing():
             ('z', float),
         )))
         vector_type._fields == ('x', 'y', 'z')
+
+
+def test_asdict_remove_optional():
+
+    T = TypedTuple('T', {'required': int, Optional('optional'): int})
+
+    t0 = T(required=1, optional=2)
+    assert t0.required == 1
+    assert t0.optional == 2
+
+    t1 = T(required=1)
+    assert t1.required == 1
+    assert t1.optional == UNDEFINED
+
+    d = t1._asdict()
+    assert d['required'] == 1
+    assert 'optional' not in d

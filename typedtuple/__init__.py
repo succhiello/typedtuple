@@ -4,10 +4,12 @@ try:
     from cnamedtuple import namedtuple
 except ImportError:
     from collections import namedtuple
+from collections import OrderedDict
 
 from voluptuous import Schema, UNDEFINED
 
 from six import iterkeys, iteritems
+from six.moves import zip
 
 
 def TypedTuple(name, definition):
@@ -24,16 +26,17 @@ def TypedTuple(name, definition):
 
     def new(cls, *args, **kwargs):
         kwargs.update(dict(zip(nt._fields[:len(args)], args)))
-        for key in [k for k, v in iteritems(kwargs) if v is UNDEFINED]:
+        for key in (k for k, v in iteritems(kwargs) if v is UNDEFINED):
             del kwargs[key]
         validated = schema(kwargs)
         kwargs_keys = list(iterkeys(kwargs))
-        validated.update(dict(zip([field for field in nt._fields if field not in kwargs_keys], repeat(UNDEFINED))))
+        validated.update(dict(zip((field for field in nt._fields if field not in kwargs_keys), repeat(UNDEFINED))))
         return nt.__new__(cls, **validated)
 
     return type(name, (nt,), {
         '__new__': new,
         '_make': classmethod(lambda cls, iterable: new(cls, *iterable)),
+        '_asdict': lambda self: OrderedDict(v for v in zip(self._fields, self) if v[1] != UNDEFINED),
         '__slots__': (),
     })
 

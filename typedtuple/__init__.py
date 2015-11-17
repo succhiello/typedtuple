@@ -29,8 +29,7 @@ def TypedTuple(name, definition):
         for key in (k for k, v in iteritems(kwargs) if v is UNDEFINED):
             del kwargs[key]
         validated = schema(kwargs)
-        kwargs_keys = list(iterkeys(kwargs))
-        validated.update(dict(zip((field for field in nt._fields if field not in kwargs_keys), repeat(UNDEFINED))))
+        validated.update(dict(zip((field for field in nt._fields if field not in validated), repeat(UNDEFINED))))
         return nt.__new__(cls, **validated)
 
     return type(name, (nt,), {

@@ -1,6 +1,6 @@
 from pytest import raises
 
-from voluptuous import Schema, MultipleInvalid, Coerce, Optional, UNDEFINED
+from voluptuous import Schema, MultipleInvalid, Coerce, Optional, UNDEFINED, Required
 
 from typedtuple import TypedTuple, schema
 
@@ -109,3 +109,15 @@ def test_asdict_remove_optional():
     d = t1._asdict()
     assert d['required'] == 1
     assert 'optional' not in d
+
+
+def test_default_value():
+
+    T = TypedTuple('T', {
+        Required('required', default=10): int,
+        Optional('optional', default=100): int}
+    )
+
+    t = T()
+    assert t.required == 10
+    assert t.optional == 100

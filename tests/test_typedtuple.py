@@ -2,14 +2,14 @@ from pytest import raises
 
 from voluptuous import Schema, MultipleInvalid, Coerce, Optional, UNDEFINED, Required
 
-from typedtuple import TypedTuple, schema
+from typedtuple import typedtuple, schema, TypedTupleType
 
 from math import sqrt
 
 from collections import OrderedDict
 
 
-Vector2D = TypedTuple('Vector2D', {'x': float, 'y': float})
+Vector2D = typedtuple('Vector2D', {'x': float, 'y': float})
 
 
 @schema({'x': float, 'y': float, 'z': float})
@@ -38,7 +38,7 @@ def test_validation():
 
 def test_schema_definition():
 
-    Vector = TypedTuple('Vector', Schema({'x': float, 'y': float}, required=True))
+    Vector = typedtuple('Vector', Schema({'x': float, 'y': float}, required=True))
 
     with raises(MultipleInvalid):
         Vector(x=10.0)
@@ -46,7 +46,7 @@ def test_schema_definition():
 
 def test_using_voluptuous():
 
-    Vector = TypedTuple('Vector', {'x': Coerce(float), 'y': Coerce(float)})
+    Vector = typedtuple('Vector', {'x': Coerce(float), 'y': Coerce(float)})
 
     v0 = Vector(x=10, y=20)
     v1 = Vector(x='10.0', y='20.0')
@@ -86,7 +86,7 @@ def test_inhibit_attribute_addition():
 def test_field_order_fixing():
 
     for i in range(100):
-        vector_type = TypedTuple('OrderedVector{}'.format(i), OrderedDict((
+        vector_type = typedtuple('OrderedVector{}'.format(i), OrderedDict((
             ('x', float),
             ('y', float),
             ('z', float),
@@ -96,7 +96,7 @@ def test_field_order_fixing():
 
 def test_asdict_remove_optional():
 
-    T = TypedTuple('T', {'required': int, Optional('optional'): int})
+    T = typedtuple('T', {'required': int, Optional('optional'): int})
 
     t0 = T(required=1, optional=2)
     assert t0.required == 1
@@ -113,7 +113,7 @@ def test_asdict_remove_optional():
 
 def test_default_value():
 
-    T = TypedTuple('T', {
+    T = typedtuple('T', {
         Required('required', default=10): int,
         Optional('optional', default=100): int}
     )
@@ -121,3 +121,15 @@ def test_default_value():
     t = T()
     assert t.required == 10
     assert t.optional == 100
+
+
+def test_typecheck():
+
+    assert issubclass(Vector2D, TypedTupleType)
+    assert issubclass(Vector3D, TypedTupleType)
+
+    v0 = Vector2D(x=10.0, y=20.0)
+    assert isinstance(v0, TypedTupleType)
+
+    v1 = Vector3D(x=10.0, y=20.0, z=30.0)
+    assert isinstance(v1, TypedTupleType)

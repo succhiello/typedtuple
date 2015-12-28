@@ -13,10 +13,10 @@ basic definition
 
 .. code:: python
 
-    from typedtuple import TypedTuple
+    from typedtuple import typedtuple
 
     # definition dictionary is converted to voluptuous.Schema(definition_dict, required=True)
-    Vector = TypedTuple('Vector', {'x': float, 'y': float, 'z': float})
+    Vector = typedtuple('Vector', {'x': float, 'y': float, 'z': float})
     v0 = Vector(x=10.0, y=20.0, z=30.0)
     print v0.x  # 10.0
     v1 = Vector(x=10, y=20)  # raises exception
@@ -29,7 +29,7 @@ using voluptuous schema
     from voluptuous import Schema
 
     # can use voluptuous.Schema as definition
-    Vector = TypedTuple('Vector', Schema({'x': float, 'y': float, 'z': float}, required=True))
+    Vector = typedtuple('Vector', Schema({'x': float, 'y': float, 'z': float}, required=True))
 
 using @schema decorator
 -----------------------
@@ -86,10 +86,10 @@ TypedTuple is tuple. so...
 .. code:: python
 
     from collections import OrderedDict
-    from typedtuple import TypedTuple
+    from typedtuple import typedtuple
 
-    Vector0 = TypedTuple('Vector0', OrderedDict((('x', float), ('y', float))))
-    Vector1 = TypedTuple('Vector1', OrderedDict((('y', float), ('x', float))))
+    Vector0 = typedtuple('Vector0', OrderedDict((('x', float), ('y', float))))
+    Vector1 = typedtuple('Vector1', OrderedDict((('y', float), ('x', float))))
 
     v0 = Vector0(x=10.0, y=20.0)
     v1 = Vector1(x=20.0, y=10.0)

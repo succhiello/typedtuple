@@ -6,9 +6,9 @@ setup(
     name='typedtuple',
     version='0.0.3',
     description='namedtuple with validation',
-    author='xica developer team',
-    author_email='info@xica.net',
-    url='http://github.com/xica/typedtuple',
+    author='Satoshi Ebihara',
+    author_email='succhiello@gmail.com',
+    url='http://github.com/succhiello/typedtuple',
     license='MIT',
     classifiers=[
         'Development Status :: 3 - Alpha',

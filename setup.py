@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='typedtuple',
-    version='0.0.3',
+    version='0.1.0',
     description='namedtuple with validation',
     author='Satoshi Ebihara',
     author_email='succhiello@gmail.com',

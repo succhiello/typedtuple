@@ -30,7 +30,7 @@ def typedtuple(name, definition):
 
     def new(cls, *args, **kwargs):
         kwargs.update(dict(zip(nt._fields[:len(args)], args)))
-        for key in (k for k, v in iteritems(kwargs) if v is UNDEFINED):
+        for key in [k for k, v in iteritems(kwargs) if v is UNDEFINED]:
             del kwargs[key]
         validated = schema(kwargs)
         validated.update(dict(zip((field for field in nt._fields if field not in validated), repeat(UNDEFINED))))

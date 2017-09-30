@@ -133,3 +133,11 @@ def test_typecheck():
 
     v1 = Vector3D(x=10.0, y=20.0, z=30.0)
     assert isinstance(v1, TypedTupleType)
+
+
+def test_replace():
+
+    T = typedtuple('T', {'replaced': int})
+
+    t = T(replaced=10)
+    assert t._replace(replaced=100).replaced == 100
